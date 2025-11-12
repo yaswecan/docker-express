@@ -75,7 +75,7 @@ export default function App() {
 
   const fetchPosts = async () => {
     try {
-      const response = await fetch('http://159.69.22.78/api/posts');
+      const response = await fetch('https://les-bg-du-code.fr/api/posts');
       const data = await response.json();
       setPosts(data.posts || []);
     } catch (error) {
