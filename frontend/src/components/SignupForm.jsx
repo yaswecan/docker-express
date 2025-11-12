@@ -36,7 +36,7 @@ export default function SignupForm({ onSignupSuccess, onSwitchToLogin }) {
     setLoading(true);
 
     try {
-      const response = await fetch('http://159.69.22.78/api/auth/register', {
+      const response = await fetch('https://les-bg-du-code.fr/api/auth/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

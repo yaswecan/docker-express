@@ -22,7 +22,7 @@ export default function LoginForm({ onLoginSuccess, onSwitchToSignup }) {
     setLoading(true);
 
     try {
-      const response = await fetch('http://159.69.22.78/api/auth/login', {
+      const response = await fetch('https://les-bg-du-code.fr/api/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
