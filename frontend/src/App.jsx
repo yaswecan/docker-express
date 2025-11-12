@@ -28,7 +28,7 @@ export default function App() {
     // Connexion au serveur Socket.IO seulement si l'utilisateur est connecté
     if (!user) return;
 
-    const newSocket = io('http://localhost:3000', {
+    const newSocket = io('http://159.69.22.78', {
       transports: ['websocket', 'polling'],
     });
 
@@ -75,7 +75,7 @@ export default function App() {
 
   const fetchPosts = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/posts');
+      const response = await fetch('http://159.69.22.78/api/posts');
       const data = await response.json();
       setPosts(data.posts || []);
     } catch (error) {
