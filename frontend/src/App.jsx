@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
 import LoginForm from './components/LoginForm';
-import SignupForm from './components/SignupForm';
 import Navbar from './components/Navbar';
+import SignupForm from './components/SignupForm';
 
 export default function App() {
   const [posts, setPosts] = useState([]);
@@ -45,10 +45,10 @@ export default function App() {
     // Écouter les nouveaux posts
     newSocket.on('newPost', (newPost) => {
       console.log('📬 Nouveau post reçu:', newPost);
-      
+
       // Ajouter le post au début de la liste
       setPosts((prevPosts) => [newPost, ...prevPosts]);
-      
+
       // Ajouter une notification
       const notification = {
         id: Date.now(),
@@ -56,7 +56,7 @@ export default function App() {
         post: newPost,
       };
       setNotifications((prev) => [notification, ...prev]);
-      
+
       // Supprimer la notification après 5 secondes
       setTimeout(() => {
         setNotifications((prev) => prev.filter((n) => n.id !== notification.id));
@@ -109,8 +109,8 @@ export default function App() {
   // Si l'utilisateur n'est pas connecté, afficher les formulaires d'authentification
   if (!user) {
     return (
-      <div style={{ 
-        padding: '20px', 
+      <div style={{
+        padding: '20px',
         fontFamily: 'Arial, sans-serif',
         minHeight: '100vh',
         background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
@@ -183,7 +183,7 @@ export default function App() {
         <h2 style={{ marginBottom: '20px' }}>
           📝 Posts récents ({posts.length})
         </h2>
-        
+
         {posts.length === 0 ? (
           <p style={{ textAlign: 'center', color: '#666' }}>
             Aucun post pour le moment. Les nouveaux posts apparaîtront ici automatiquement ! 🎉
@@ -243,9 +243,9 @@ export default function App() {
                   {post.content}
                 </p>
 
-                <div style={{ 
-                  display: 'flex', 
-                  gap: '15px', 
+                <div style={{
+                  display: 'flex',
+                  gap: '15px',
                   color: '#666',
                   fontSize: '14px',
                   marginTop: '10px'

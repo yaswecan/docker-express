@@ -19,16 +19,19 @@ setup:
 	@make start
 
 stop:
-	@docker compose down $(or ${word 2,$(MAKECMDGOALS)}, -v)
+	@docker compose down $(or $(word 2,$(MAKECMDGOALS)), -v)
 
 logs:
 	@docker compose logs $(word 2,$(MAKECMDGOALS))
 
 exec:
-	@docker compose exec -it $(word 2,$(MAKECMDGOALS)) $(word 3,$(MAKECMDGOALS))
+	@docker compose exec -T -it $(word 2,$(MAKECMDGOALS)) $(word 3,$(MAKECMDGOALS))
 
 lint-%:
-	@docker compose exec $* npm run lint
+	@docker compose exec -T $* npm run lint
+
+lint-fix-%:
+	@docker compose exec -T $* npm run fix
 
 test:
-	@docker compose exec backend npm run lint && docker compose exec frontend npm run lint
+	make lint-frontend; make lint-backend

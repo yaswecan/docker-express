@@ -81,7 +81,7 @@ async function optionalAuth(req, res, next) {
     }
   } catch (error) {
     // En cas d'erreur, on continue sans utilisateur authentifié
-    console.log("Token invalide ou expiré (optionalAuth)");
+    console.log("Token invalide ou expiré (optionalAuth) : " + error);
   }
 
   next();

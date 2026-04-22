@@ -199,7 +199,7 @@ async function initDatabase() {
 
       // Insérer les posts en les liant à l'utilisateur par défaut
       for (const post of postsData) {
-        const [result] = await connection.query(
+        await connection.query(
           "INSERT INTO posts (id, image_url, content, likes, user_id) VALUES (?, ?, ?, ?, ?)",
           [post.id, post.image_url, post.content, post.likes, defaultUserId]
         );

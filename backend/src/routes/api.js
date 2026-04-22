@@ -291,7 +291,7 @@ router.post("/posts", authenticateToken, async (req, res) => {
         `📡 Notification Socket.IO envoyée pour le nouveau post #${result.insertId}`
       );
     } catch (error) {
-      console.log("⚠️ Socket.IO pas disponible, notification ignorée");
+      console.log("⚠️ Socket.IO pas disponible, notification ignorée : " + error.message);
     }
 
     res.status(201).json({
