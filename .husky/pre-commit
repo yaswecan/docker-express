@@ -1,3 +1,27 @@
-#!/bin/sh
+#!/usr/bin/env bash
+. "$(dirname "$0")/\_/husky.sh"
 
-make test
+echo "Running tests..."
+
+status=0
+
+echo ""
+echo "Backend lint"
+make lint-backend || status=1
+
+echo ""
+echo "Frontend lint"
+make lint-frontend || status=1
+
+echo ""
+echo "Running full test suite"
+make test || status=1
+
+echo ""
+if [ $status -eq 0 ]; then
+echo "All checks passed"
+else
+echo "Some checks failed"
+fi
+
+exit $status
