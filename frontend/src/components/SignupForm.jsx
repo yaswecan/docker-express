@@ -36,7 +36,7 @@ export default function SignupForm({ onSignupSuccess, onSwitchToLogin }) {
     setLoading(true);
 
     try {
-      const response = await fetch('https://les-bg-du-code.fr/api/auth/register', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -51,7 +51,7 @@ export default function SignupForm({ onSignupSuccess, onSwitchToLogin }) {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || 'Erreur lors de l\'inscription');
+        throw new Error(data.message || "Erreur lors de l'inscription");
       }
 
       // Sauvegarder le token et les infos utilisateur
@@ -228,7 +228,7 @@ export default function SignupForm({ onSignupSuccess, onSwitchToLogin }) {
           onMouseEnter={(e) => !loading && (e.target.style.opacity = '0.9')}
           onMouseLeave={(e) => !loading && (e.target.style.opacity = '1')}
         >
-          {loading ? 'Inscription...' : 'S\'inscrire'}
+          {loading ? 'Inscription...' : "S'inscrire"}
         </button>
       </form>
 
