@@ -68,7 +68,7 @@ async function initDatabase() {
         if (fkError.code !== "ER_DUP_KEYNAME") {
           console.log(
             "Note: Contrainte de clé étrangère déjà existante ou erreur:",
-            fkError.code
+            fkError.code,
           );
         }
       }
@@ -90,7 +90,7 @@ async function initDatabase() {
       if (error.code !== "ER_CANT_DROP_FIELD_OR_KEY") {
         console.log(
           "Note: Colonne author déjà supprimée ou erreur:",
-          error.code
+          error.code,
         );
       }
     }
@@ -128,7 +128,7 @@ async function initDatabase() {
         if (fkError.code !== "ER_DUP_KEYNAME") {
           console.log(
             "Note: Contrainte de clé étrangère déjà existante ou erreur:",
-            fkError.code
+            fkError.code,
           );
         }
       }
@@ -154,7 +154,7 @@ async function initDatabase() {
 
     // Vérifier si les données existent déjà
     const [existingPosts] = await connection.query(
-      "SELECT COUNT(*) as count FROM posts"
+      "SELECT COUNT(*) as count FROM posts",
     );
 
     if (existingPosts[0].count === 0) {
@@ -162,14 +162,14 @@ async function initDatabase() {
 
       // Créer un utilisateur par défaut pour les posts initiaux si aucun utilisateur n'existe
       const [existingUsers] = await connection.query(
-        "SELECT COUNT(*) as count FROM users"
+        "SELECT COUNT(*) as count FROM users",
       );
 
       let defaultUserId = 1;
 
       if (existingUsers[0].count === 0) {
         console.log(
-          "Création d'un utilisateur par défaut pour les posts initiaux..."
+          "Création d'un utilisateur par défaut pour les posts initiaux...",
         );
         const bcrypt = require("bcryptjs");
         const salt = await bcrypt.genSalt(10);
@@ -182,26 +182,26 @@ async function initDatabase() {
             "default@example.com",
             hashedPassword,
             "https://i.pravatar.cc/150?img=10",
-          ]
+          ],
         );
         defaultUserId = userResult.insertId;
         console.log(`Utilisateur par défaut créé avec l'ID: ${defaultUserId}`);
       } else {
         // Récupérer le premier utilisateur existant
         const [firstUser] = await connection.query(
-          "SELECT id FROM users ORDER BY id ASC LIMIT 1"
+          "SELECT id FROM users ORDER BY id ASC LIMIT 1",
         );
         defaultUserId = firstUser[0].id;
         console.log(
-          `Utilisation de l'utilisateur existant ID: ${defaultUserId}`
+          `Utilisation de l'utilisateur existant ID: ${defaultUserId}`,
         );
       }
 
       // Insérer les posts en les liant à l'utilisateur par défaut
       for (const post of postsData) {
-        const [result] = await connection.query(
+        await connection.query(
           "INSERT INTO posts (id, image_url, content, likes, user_id) VALUES (?, ?, ?, ?, ?)",
-          [post.id, post.image_url, post.content, post.likes, defaultUserId]
+          [post.id, post.image_url, post.content, post.likes, defaultUserId],
         );
 
         // Insérer les commentaires pour ce post (liés à l'utilisateur par défaut)
@@ -209,17 +209,17 @@ async function initDatabase() {
           for (const comment of post.comments) {
             await connection.query(
               "INSERT INTO comments (post_id, user_id, comment) VALUES (?, ?, ?)",
-              [post.id, defaultUserId, comment.comment]
+              [post.id, defaultUserId, comment.comment],
             );
           }
         }
       }
 
       console.log(
-        `${postsData.length} posts et leurs commentaires ont été migrés avec succès!`
+        `${postsData.length} posts et leurs commentaires ont été migrés avec succès!`,
       );
       console.log(
-        `Tous les posts ont été liés à l'utilisateur ID: ${defaultUserId}`
+        `Tous les posts ont été liés à l'utilisateur ID: ${defaultUserId}`,
       );
     } else {
       console.log("Les données existent déjà dans la base de données");
@@ -227,27 +227,27 @@ async function initDatabase() {
 
     // Migration: Lier les posts existants sans user_id à un utilisateur
     const [postsWithoutUser] = await connection.query(
-      "SELECT COUNT(*) as count FROM posts WHERE user_id IS NULL"
+      "SELECT COUNT(*) as count FROM posts WHERE user_id IS NULL",
     );
 
     if (postsWithoutUser[0].count > 0) {
       console.log(
-        `🔄 Migration: ${postsWithoutUser[0].count} posts sans user_id trouvés...`
+        `🔄 Migration: ${postsWithoutUser[0].count} posts sans user_id trouvés...`,
       );
 
       // Récupérer le premier utilisateur
       const [firstUser] = await connection.query(
-        "SELECT id FROM users ORDER BY id ASC LIMIT 1"
+        "SELECT id FROM users ORDER BY id ASC LIMIT 1",
       );
 
       if (firstUser.length > 0) {
         const userId = firstUser[0].id;
         await connection.query(
           "UPDATE posts SET user_id = ? WHERE user_id IS NULL",
-          [userId]
+          [userId],
         );
         console.log(
-          `✅ Tous les posts ont été liés à l'utilisateur ID: ${userId}`
+          `✅ Tous les posts ont été liés à l'utilisateur ID: ${userId}`,
         );
       } else {
         console.log("⚠️ Aucun utilisateur trouvé pour lier les posts");
@@ -256,27 +256,27 @@ async function initDatabase() {
 
     // Migration: Lier les commentaires existants sans user_id à un utilisateur
     const [commentsWithoutUser] = await connection.query(
-      "SELECT COUNT(*) as count FROM comments WHERE user_id IS NULL"
+      "SELECT COUNT(*) as count FROM comments WHERE user_id IS NULL",
     );
 
     if (commentsWithoutUser[0].count > 0) {
       console.log(
-        `🔄 Migration: ${commentsWithoutUser[0].count} commentaires sans user_id trouvés...`
+        `🔄 Migration: ${commentsWithoutUser[0].count} commentaires sans user_id trouvés...`,
       );
 
       // Récupérer le premier utilisateur
       const [firstUser] = await connection.query(
-        "SELECT id FROM users ORDER BY id ASC LIMIT 1"
+        "SELECT id FROM users ORDER BY id ASC LIMIT 1",
       );
 
       if (firstUser.length > 0) {
         const userId = firstUser[0].id;
         await connection.query(
           "UPDATE comments SET user_id = ? WHERE user_id IS NULL",
-          [userId]
+          [userId],
         );
         console.log(
-          `✅ Tous les commentaires ont été liés à l'utilisateur ID: ${userId}`
+          `✅ Tous les commentaires ont été liés à l'utilisateur ID: ${userId}`,
         );
       } else {
         console.log("⚠️ Aucun utilisateur trouvé pour lier les commentaires");
@@ -287,7 +287,7 @@ async function initDatabase() {
   } catch (error) {
     console.error(
       "Erreur lors de l'initialisation de la base de données:",
-      error
+      error,
     );
     throw error;
   } finally {

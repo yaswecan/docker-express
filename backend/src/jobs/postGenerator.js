@@ -3,28 +3,28 @@ const { pool } = require("../config/database");
 const { getIO } = require("../config/socket");
 
 // Listes de données pour générer des posts aléatoires
-const authors = [
-  "Alice Dupont",
-  "Bob Martin",
-  "Claire Durand",
-  "David Leroy",
-  "Emma Lefevre",
-  "François Petit",
-  "Gabriel Moreau",
-  "Hélène Richard",
-  "Isabelle Bernard",
-  "Jacques Simon",
-  "Karim Nasser",
-  "Laura Fontaine",
-  "Mathieu Roy",
-  "Nadia Lopez",
-  "Olivier Dubois",
-  "Pauline Gauthier",
-  "Quentin Fabre",
-  "Raphaëlle Simon",
-  "Stéphane Marchand",
-  "Valérie Caron",
-];
+// const authors = [
+//   "Alice Dupont",
+//   "Bob Martin",
+//   "Claire Durand",
+//   "David Leroy",
+//   "Emma Lefevre",
+//   "François Petit",
+//   "Gabriel Moreau",
+//   "Hélène Richard",
+//   "Isabelle Bernard",
+//   "Jacques Simon",
+//   "Karim Nasser",
+//   "Laura Fontaine",
+//   "Mathieu Roy",
+//   "Nadia Lopez",
+//   "Olivier Dubois",
+//   "Pauline Gauthier",
+//   "Quentin Fabre",
+//   "Raphaëlle Simon",
+//   "Stéphane Marchand",
+//   "Valérie Caron",
+// ];
 
 const topics = [
   { content: "Découverte de React", tags: "#React #Coding #WebDevelopment" },
@@ -96,7 +96,7 @@ async function generateRandomPost() {
   try {
     // Récupérer un utilisateur aléatoire de la base de données
     const [users] = await pool.query(
-      "SELECT id, username FROM users ORDER BY RAND() LIMIT 1"
+      "SELECT id, username FROM users ORDER BY RAND() LIMIT 1",
     );
 
     // Si aucun utilisateur n'existe, ne pas créer de post
@@ -110,7 +110,7 @@ async function generateRandomPost() {
     // Insérer le post
     const [result] = await pool.query(
       "INSERT INTO posts (image_url, content, likes, user_id) VALUES (?, ?, ?, ?)",
-      [imageUrl, content, likes, userId]
+      [imageUrl, content, likes, userId],
     );
 
     const postId = result.insertId;
@@ -122,7 +122,7 @@ async function generateRandomPost() {
 
       // Récupérer un utilisateur aléatoire pour le commentaire
       const [commentUsers] = await pool.query(
-        "SELECT id FROM users ORDER BY RAND() LIMIT 1"
+        "SELECT id FROM users ORDER BY RAND() LIMIT 1",
       );
 
       const commentUserId =
@@ -130,12 +130,12 @@ async function generateRandomPost() {
 
       await pool.query(
         "INSERT INTO comments (post_id, user_id, comment) VALUES (?, ?, ?)",
-        [postId, commentUserId, randomComment.comment]
+        [postId, commentUserId, randomComment.comment],
       );
     }
 
     console.log(
-      `✅ Post généré: "${content.substring(0, 50)}..." par user #${userId}`
+      `✅ Post généré: "${content.substring(0, 50)}..." par user #${userId}`,
     );
 
     // Récupérer le post complet avec ses commentaires pour l'envoyer via Socket.IO
@@ -152,7 +152,7 @@ async function generateRandomPost() {
       FROM posts p
       LEFT JOIN users u ON p.user_id = u.id
       WHERE p.id = ?`,
-      [postId]
+      [postId],
     );
 
     const [postComments] = await pool.query(
@@ -166,7 +166,7 @@ async function generateRandomPost() {
       LEFT JOIN users u ON c.user_id = u.id
       WHERE c.post_id = ? 
       ORDER BY c.created_at DESC`,
-      [postId]
+      [postId],
     );
 
     const newPost = {
@@ -223,16 +223,16 @@ function startPostGeneratorCron() {
   const job = cron.schedule("*/1 * * * *", async () => {
     const now = new Date().toLocaleString("fr-FR");
     console.log(
-      `\n⏰ [${now}] Démarrage du cron job de génération de posts...`
+      `\n⏰ [${now}] Démarrage du cron job de génération de posts...`,
     );
     await generateMultiplePosts(10);
   });
 
   console.log(
-    "🕐 Cron job de génération de posts démarré (toutes les 5 minutes)"
+    "🕐 Cron job de génération de posts démarré (toutes les 5 minutes)",
   );
   console.log(
-    "📝 10 nouveaux posts seront créés automatiquement toutes les 5 minutes"
+    "📝 10 nouveaux posts seront créés automatiquement toutes les 5 minutes",
   );
 
   return job;

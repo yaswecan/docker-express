@@ -78,7 +78,7 @@ router.post("/register", async (req, res) => {
     // Vérifier si l'email existe déjà
     const [existingUsers] = await pool.query(
       "SELECT id FROM users WHERE email = ?",
-      [email]
+      [email],
     );
 
     if (existingUsers.length > 0) {
@@ -91,7 +91,7 @@ router.post("/register", async (req, res) => {
     // Vérifier si le username existe déjà
     const [existingUsernames] = await pool.query(
       "SELECT id FROM users WHERE username = ?",
-      [username]
+      [username],
     );
 
     if (existingUsernames.length > 0) {
@@ -108,7 +108,7 @@ router.post("/register", async (req, res) => {
     // Créer l'utilisateur
     const [result] = await pool.query(
       "INSERT INTO users (username, email, password, image_url) VALUES (?, ?, ?, ?)",
-      [username, email, hashedPassword, image_url || null]
+      [username, email, hashedPassword, image_url || null],
     );
 
     // Générer le token JWT
@@ -119,7 +119,7 @@ router.post("/register", async (req, res) => {
     // Récupérer l'utilisateur créé (sans le mot de passe)
     const [newUser] = await pool.query(
       "SELECT id, username, email, image_url, created_at FROM users WHERE id = ?",
-      [result.insertId]
+      [result.insertId],
     );
 
     res.status(201).json({
@@ -191,7 +191,7 @@ router.post("/login", async (req, res) => {
     // Récupérer l'utilisateur par email
     const [users] = await pool.query(
       "SELECT id, username, email, password, image_url, created_at FROM users WHERE email = ?",
-      [email]
+      [email],
     );
 
     if (users.length === 0) {
@@ -219,7 +219,7 @@ router.post("/login", async (req, res) => {
     });
 
     // Retourner l'utilisateur sans le mot de passe
-    const { password: _, ...userWithoutPassword } = user;
+    const { password: userWithoutPassword } = user;
 
     res.json({
       message: "Connexion réussie",
@@ -386,7 +386,7 @@ router.put("/update-profile", authenticateToken, async (req, res) => {
     if (username) {
       const [existingUsers] = await pool.query(
         "SELECT id FROM users WHERE username = ? AND id != ?",
-        [username, userId]
+        [username, userId],
       );
 
       if (existingUsers.length > 0) {
@@ -416,13 +416,13 @@ router.put("/update-profile", authenticateToken, async (req, res) => {
     // Mettre à jour les champs
     await pool.query(
       `UPDATE users SET ${updates.join(", ")} WHERE id = ?`,
-      values
+      values,
     );
 
     // Récupérer l'utilisateur mis à jour
     const [updatedUser] = await pool.query(
       "SELECT id, username, email, image_url, created_at FROM users WHERE id = ?",
-      [userId]
+      [userId],
     );
 
     res.json({
@@ -513,7 +513,7 @@ router.put("/change-password", authenticateToken, async (req, res) => {
     // Récupérer l'utilisateur avec son mot de passe
     const [users] = await pool.query(
       "SELECT password FROM users WHERE id = ?",
-      [userId]
+      [userId],
     );
 
     if (users.length === 0) {
@@ -526,7 +526,7 @@ router.put("/change-password", authenticateToken, async (req, res) => {
     // Vérifier le mot de passe actuel
     const isPasswordValid = await bcrypt.compare(
       currentPassword,
-      users[0].password
+      users[0].password,
     );
 
     if (!isPasswordValid) {
