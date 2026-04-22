@@ -219,7 +219,7 @@ router.post("/login", async (req, res) => {
     });
 
     // Retourner l'utilisateur sans le mot de passe
-    const { password: _, ...userWithoutPassword } = user;
+    const {...userWithoutPassword } = user;
 
     res.json({
       message: "Connexion réussie",

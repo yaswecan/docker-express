@@ -199,10 +199,11 @@ async function initDatabase() {
 
       // Insérer les posts en les liant à l'utilisateur par défaut
       for (const post of postsData) {
-        const [result] = await connection.query(
-          "INSERT INTO posts (id, image_url, content, likes, user_id) VALUES (?, ?, ?, ?, ?)",
-          [post.id, post.image_url, post.content, post.likes, defaultUserId]
-        );
+        
+        // const [result] = await connection.query(
+        //   "INSERT INTO posts (id, image_url, content, likes, user_id) VALUES (?, ?, ?, ?, ?)",
+        //   [post.id, post.image_url, post.content, post.likes, defaultUserId]
+        // );
 
         // Insérer les commentaires pour ce post (liés à l'utilisateur par défaut)
         if (post.comments && post.comments.length > 0) {

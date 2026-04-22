@@ -5,6 +5,9 @@ DB_PASS := ${DB_ROOT_PASSWORD}
 DB_NAME := ${DB_NAME}
 BACKUP_DIR := ./backups
 
+hello:
+	echo "hello julio"
+
 install: 
 	@copy .env.example .env
 	@copy frontend\.env.example frontend\.env

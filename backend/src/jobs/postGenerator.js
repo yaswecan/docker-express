@@ -3,28 +3,28 @@ const { pool } = require("../config/database");
 const { getIO } = require("../config/socket");
 
 // Listes de données pour générer des posts aléatoires
-const authors = [
-  "Alice Dupont",
-  "Bob Martin",
-  "Claire Durand",
-  "David Leroy",
-  "Emma Lefevre",
-  "François Petit",
-  "Gabriel Moreau",
-  "Hélène Richard",
-  "Isabelle Bernard",
-  "Jacques Simon",
-  "Karim Nasser",
-  "Laura Fontaine",
-  "Mathieu Roy",
-  "Nadia Lopez",
-  "Olivier Dubois",
-  "Pauline Gauthier",
-  "Quentin Fabre",
-  "Raphaëlle Simon",
-  "Stéphane Marchand",
-  "Valérie Caron",
-];
+// const authors = [
+//   "Alice Dupont",
+//   "Bob Martin",
+//   "Claire Durand",
+//   "David Leroy",
+//   "Emma Lefevre",
+//   "François Petit",
+//   "Gabriel Moreau",
+//   "Hélène Richard",
+//   "Isabelle Bernard",
+//   "Jacques Simon",
+//   "Karim Nasser",
+//   "Laura Fontaine",
+//   "Mathieu Roy",
+//   "Nadia Lopez",
+//   "Olivier Dubois",
+//   "Pauline Gauthier",
+//   "Quentin Fabre",
+//   "Raphaëlle Simon",
+//   "Stéphane Marchand",
+//   "Valérie Caron",
+// ];
 
 const topics = [
   { content: "Découverte de React", tags: "#React #Coding #WebDevelopment" },
@@ -186,7 +186,7 @@ async function generateRandomPost() {
       const io = getIO();
       io.emit("newPost", newPost);
       console.log(`📡 Notification Socket.IO envoyée pour le post #${postId}`);
-    } catch (error) {
+    } catch {
       console.log("⚠️ Socket.IO pas encore initialisé, notification ignorée");
     }
 
