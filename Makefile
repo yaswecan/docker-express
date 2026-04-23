@@ -1,6 +1,6 @@
 install:
-	echo "Hello ci"
+	cd backend && npm i
 
-start: 
-	docker compose up -d --build
+test: 
+	echo "test"
 	
