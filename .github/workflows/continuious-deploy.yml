@@ -1,8 +1,9 @@
-name: CI
+name: image-builder
 
 on:
   push:
-  pull_request:
+    branches:
+      - main
 
 jobs:
   build-backend-image:

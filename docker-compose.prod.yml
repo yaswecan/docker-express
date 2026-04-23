@@ -37,7 +37,7 @@ services:
       - mysql
 
   backend:
-    image: TON_DOCKERHUB_USER/backend:latest
+    image: DOCKERHUB_USERNAME/backend:latest
     container_name: express-backend
     restart: always
     ports:
@@ -61,7 +61,7 @@ services:
     command: npm run start
 
   frontend:
-    image: TON_DOCKERHUB_USER/frontend:latest
+    image: DOCKERHUB_USERNAME/frontend:latest
     container_name: react-frontend
     restart: always
     ports:
