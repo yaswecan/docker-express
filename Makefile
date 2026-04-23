@@ -1,6 +1,5 @@
 install:
-	copy frontend\.env.example .env
-	copy .env.example .env
+	echo "Hello ci"
 
 start: 
 	docker compose up -d --build
