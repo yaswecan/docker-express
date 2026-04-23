@@ -15,4 +15,4 @@ jobs:
         with:
           node-version: 20
           cache: npm
-      - run: make ci
+      - run: make install
